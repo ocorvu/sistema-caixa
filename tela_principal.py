@@ -1,11 +1,12 @@
 from cgitb import text
 from tkinter import *
 from tkinter import font
+from turtle import bgcolor, width
 from  win32api import GetSystemMetrics
 
 root = Tk()
 root.attributes('-fullscreen', True)
-root.title('Padaria Mariana')
+
 root.resizable(False, False)
 
 largura_monitor = GetSystemMetrics(0)
@@ -40,13 +41,13 @@ def informacoes():
 
 def botoes_pagamentos():
     dinheiro = Button(root, text='Dinheiro', font=fonte_pagamento)
-    dinheiro.place(x= ((3 * largura_monitor) / 4) + 10, y=altura_monitor/4 + 15)
+    dinheiro.place(x= ((4 * largura_monitor) / 5) + 5, y=altura_monitor/4 + 15)
 
     cartao = Button(root, text='Cartão', font=fonte_pagamento)
-    cartao.place(x= ((3 * largura_monitor) / 4) + 10, y=altura_monitor/4 + 50)
+    cartao.place(x= ((4 * largura_monitor) / 5) + 5, y=altura_monitor/4 + 50)
 
     pix = Button(root, text='Pix', font=fonte_pagamento)
-    pix.place(x= ((3 * largura_monitor) / 4) + 10, y=altura_monitor/4 + 85)
+    pix.place(x= ((4 * largura_monitor) / 5) + 5, y=altura_monitor/4 + 85)
 
 def tela_produtos():
     produtos = Canvas(root, width=largura_monitor/2, height=altura_monitor/2, background='blue')
@@ -55,10 +56,23 @@ def tela_produtos():
     produtos.create_text(50, 50, text='Produtos', anchor='nw', font='TkMenuFont', fill='white')
 
 def tela_resumo():
-    resumo = Canvas(root, width=largura_monitor/4, height=altura_monitor/2, background='red')
+    largura_resumo = largura_monitor / 4
+    altura_resumo =  altura_monitor / 2
+
+    valor = 123.45
+
+    resumo = Canvas(root, width=largura_resumo, height=altura_resumo, background='red')
     resumo.place(x=largura_monitor/2 + largura_monitor/20, y = altura_monitor/4 + 15)
 
-    resumo.create_text(50, 50, text='Resumo', anchor='nw', font='TkMenuFont', fill='white')
+    total = Label(root, text=f'TOTAL: {valor}', font=fonte_titulo)
+
+    resumo.create_text(largura_resumo * 0.1, altura_resumo * 0.1, text='Resumo', anchor='nw', font='TkMenuFont', fill='white')
+
+    resumo.create_window(largura_resumo * 0.51 , altura_resumo * 0.95,  window= total, width= largura_resumo * 0.90, anchor='center')
+
+    # resumo.create_text(largura_resumo * 0.20, altura_resumo * 0.95, text='TOTAL: R$123,45', fill='black') 
+
+    
 
 def botao_concluir_venda():
     concluir = Button(root, text='Concluir', font=fonte_pagamento, state= DISABLED)
