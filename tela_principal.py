@@ -1,3 +1,4 @@
+from cgitb import text
 from datetime import datetime
 from tkinter import *
 from  win32api import GetSystemMetrics
@@ -14,6 +15,7 @@ altura_monitor = GetSystemMetrics(1)
 fonte_titulo = ('Courier New', 25)
 fonte_informacoes = ('Courier New', 13)
 fonte_pagamento = ('Courier New', 13)
+fonte_subtotal = ('Courier New', 18)
 
 def eixos():
     for i in range(0, largura_monitor, 10):
@@ -43,14 +45,22 @@ def relogio():
     root.after(1000, relogio)
 
 def botoes_pagamentos():
-    dinheiro = Button(root, text='Dinheiro', font=fonte_pagamento)
+    dinheiro = Button(root, text='Dinheiro', font=fonte_pagamento, command= lambda: tela_resumo(1))
     dinheiro.place(x= largura_monitor * 0.80 + 5, y=altura_monitor * 0.25 + 15)
 
-    cartao = Button(root, text='Cartão', font=fonte_pagamento)
+    cartao = Button(root, text='Cartão', font=fonte_pagamento, command= lambda: tela_resumo(2))
     cartao.place(x= largura_monitor * 0.80 + 5, y=altura_monitor * 0.25 + 50)
 
-    pix = Button(root, text='Pix', font=fonte_pagamento)
+    pix = Button(root, text='Pix', font=fonte_pagamento, command= lambda: tela_resumo(3))
     pix.place(x= largura_monitor * 0.80 + 5, y=altura_monitor * 0.25 + 85)
+
+def seleciona_forma_pagamento(opcao):
+    if opcao == 1:
+        return 'Dinheiro'
+    elif opcao == 2:
+        return 'Cartão'
+    elif opcao == 3:
+        return 'Pix'
 
 def tela_produtos():
     produtos = Canvas(root, width=largura_monitor * 0.50, height=altura_monitor * 0.50, background='blue')
@@ -58,20 +68,26 @@ def tela_produtos():
 
     produtos.create_text(50, 50, text='Produtos', anchor='nw', font='TkMenuFont', fill='white')
 
-def tela_resumo():
+def tela_resumo(opcao):
     largura_resumo = largura_monitor * 0.25
     altura_resumo =  altura_monitor * 0.50
 
+    pagamento = seleciona_forma_pagamento(opcao)
     valor = 123.45
 
     resumo = Canvas(root, width=largura_resumo, height=altura_resumo, background='red')
     resumo.place(x=largura_monitor * 0.5 + largura_monitor * 0.05, y = altura_monitor * 0.25 + 15)
 
-    total = Label(root, text=f'TOTAL: {valor}', font=fonte_titulo)
+    subtotal = Label(root, text=f'Subtotal: R${valor}', font=fonte_subtotal)
+    forma_pagamento = Label(root, text=f'Forma de Pagamento: {pagamento}', font=fonte_pagamento)
+    total = Label(root, text=f'TOTAL: R${valor}', font=fonte_titulo)
 
     resumo.create_text(largura_resumo * 0.1, altura_resumo * 0.1, text='Resumo', anchor='nw', font='TkMenuFont', fill='white')
 
+    resumo.create_window(largura_resumo * 0.51, altura_resumo * 0.77, window=forma_pagamento, width=largura_resumo * 0.90, anchor='center')
+    resumo.create_window(largura_resumo * 0.51, altura_resumo * 0.85, window=subtotal, width=largura_resumo * 0.90, anchor='center')
     resumo.create_window(largura_resumo * 0.51 , altura_resumo * 0.95,  window= total, width= largura_resumo * 0.90, anchor='center')
+
    
 def botao_concluir_venda():
     concluir = Button(root, text='Concluir', font=fonte_pagamento, state= DISABLED)
@@ -86,11 +102,11 @@ titulo()
 informacoes()
 relogio()
 tela_produtos()
-tela_resumo()
+tela_resumo(1)
 botoes_pagamentos()
 botao_sair()
 
  
-eixos()
+
 botao_concluir_venda()
 root.mainloop()
